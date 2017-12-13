@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\User;
+use App\Profile;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +30,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -35,7 +41,27 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email'
+        ];
+
+        $this->validate($request, $rules);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt('password')
+        ]);
+
+        $profile = Profile::create([
+            'user_id' => $user->id,
+            'avatar' => 'uploads/avatars/imagessd.png'
+        ]);
+
+        Session::flash('success', 'User added successfully');
+
+        return redirect()->route('users');
     }
 
     /**
@@ -59,7 +85,7 @@ class UsersController extends Controller
     {
         //
     }
-
+ 
     /**
      * Update the specified resource in storage.
      *
@@ -82,4 +108,31 @@ class UsersController extends Controller
     {
         //
     }
+
+    public function admin($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->admin = 1;
+
+        $user->save();
+
+        Session::flash('success', 'Successfully changed user permissions');
+
+        return redirect()->back();
+    }
+
+    public function not_admin($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->admin = 0;
+
+        $user->save();
+
+        Session::flash('success', 'Successfully changed user permissions');
+
+        return redirect()->back();
+    }
+    
 }
