@@ -53,7 +53,7 @@
                         
                         <td>
                         
-                            <a href="{{ route('category.edit', ['id' => $category->id]) }}" class="btn btn-info "> update
+                            <a href="{{ route('category.edit', ['id' => $category->id]) }}" class="btn btn-info "> Edit
 
                                 <span class="glyphicon glyphicon-pencil"> </span>
 
@@ -63,7 +63,7 @@
 
                         <td>
 
-                            <a href="{{ route('category.delete', ['id' => $category->id]) }}" class="btn btn-danger"> delete
+                            <a href="{{ route('category.delete', ['id' => $category->id]) }}" class="btn btn-danger"> Delete
                             
                                 <span class="glyphicon glyphicon-trash"> </span>
 

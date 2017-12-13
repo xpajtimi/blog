@@ -10,7 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Just testing things 
+Route::get('/test', function(){
+    return App\User::find(1)->profile;
+});
 
+// Real stuff down here
 Route::get('/', function () {
     return view('welcome');
 });
@@ -132,5 +137,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','web'] ], function(){
         'as' => 'tag.delete'
     ]);
 
+    Route::get('/users', [
+       'uses' => 'UsersController@index', 
+       'as' => 'users'
+    ]);
 });
 

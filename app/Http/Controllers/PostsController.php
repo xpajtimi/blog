@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use App\Tag;
 use App\Post;
 use App\Category;
 use Illuminate\Http\Request;
@@ -37,7 +38,7 @@ class PostsController extends Controller
             return redirect()->back();
         }
 
-        return view('admin.posts.create')->with('categories', $categories);
+        return view('admin.posts.create')->with('categories', $categories)->with('tags', Tag::all());
     }
 
     /**
@@ -53,6 +54,7 @@ class PostsController extends Controller
             'featured' => 'required|image',
             'content' => 'required',
             'category_id' => 'required',
+            'tags' => 'required'
         ];
 
         $this->validate($request, $rules);
@@ -72,6 +74,8 @@ class PostsController extends Controller
             'slug' => str_slug($request->title),
     
         ]);
+
+        $post->tags()->attach($request->tags);
 
         Session::flash('success', 'Post created successfully');
 
@@ -99,7 +103,9 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        return view('admin.posts.edit')->with('post', $post)->with('categories', Category::all());
+        return view('admin.posts.edit')->with('post', $post)
+                                       ->with('categories', Category::all())
+                                       ->with('tags', Tag::all());
     }
 
     /**
@@ -135,6 +141,8 @@ class PostsController extends Controller
         $post->category_id = $request->category_id;
 
         $post->save();
+
+        $post->tags()->sync($request->tags);
 
         Session::flash('success', 'Post updated successfully.');
 
