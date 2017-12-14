@@ -18,6 +18,8 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    @yield('styles')
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet">
@@ -112,6 +114,10 @@
                         @endif
 
                         <li class="list-group-item">
+                            <a href="{{ route('user.profile') }}"> My profile </a>
+                        </li>
+
+                        <li class="list-group-item">
                             <a href="{{ route('tags') }}"> Tags</a>
                         </li>
 
@@ -131,6 +137,14 @@
                             <a href="{{ route('posts.trashed') }}"> All trashed posts </a>
                         </li>
 
+                        @if(Auth::user()->admin)
+
+                        <li class="list-group-item">
+                            <a href="{{ route('settings') }}"> Settings </a>
+                        </li>
+
+                        @endif
+
                     </ul>
                 </div>
                 @endif               
@@ -144,7 +158,9 @@
     <script src="{{ asset('js/app.js') }}"></script>
     {{--  <script src="{{ asset('js/toastr.min.js') }}"></script>  --}}
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"> </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"> 
+    </script>
+    
     <script>
 
         @if(Session::has('success'))
@@ -158,15 +174,17 @@
             toastr.info("{{Session::get('info') }}")
 
         @endif
-
-        @if (Session::has('info'))
-            <div class="alert alert-success">
-                <span class="glyphicon glyphicon-ok"></span> 
-                <em>{!! Session::get('info') !!}</em>
-            </div>
-        @endif
     </script>
 
+    @yield('scripts')
 
+    <div id="summernote"></div>
+    <script>
+      $('#summernote').summernote({
+        placeholder: 'Hello bootstrap 4',
+        tabsize: 2,
+        height: 100
+      });
+    </script>
 </body>
 </html>
