@@ -15,13 +15,18 @@ Route::get('/test', function(){
     return App\User::find(1)->profile;
 });
 
-// Real stuff down here
+// Real stuff 
 Route::get('/', [
     'uses' => 'FrontEndController@index',
     'as' => 'index'
 ]);
 
 Auth::routes();
+
+Route::get('/{slug}', [
+    'uses' => 'FrontEndController@singlePost',
+    'as' => 'post.single'
+]);
 
 
 

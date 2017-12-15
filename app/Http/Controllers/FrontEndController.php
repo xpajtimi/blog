@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Tag;
 use App\Setting;
 use App\Category;
 use Illuminate\Http\Request;
@@ -22,5 +23,16 @@ class FrontEndController extends Controller
                 ->with('career', Category::find(5))
                 ->with('settings', Setting::first())
                 ;
+    }
+
+    public function singlePost($slug)
+    {
+        $post = Post::where('slug', $slug)->first();
+
+        return view('single')->with('post',$post)
+                             ->with('title', $post->title)
+                             ->with('settings', Setting::first())
+                             ->with('tags', Tag::all())
+                             ->with('categories', Category::take(5)->get());
     }
 }
