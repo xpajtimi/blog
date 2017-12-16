@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use Auth;
 use App\Tag;
 use App\Post;
 use App\Category;
@@ -74,6 +75,7 @@ class PostsController extends Controller
             'featured' => 'uploads/posts/' . $featured_new_name,
             'category_id' => $request->category_id,
             'slug' => str_slug($request->title),
+            'user_id' => Auth::id()
     
         ]);
 
